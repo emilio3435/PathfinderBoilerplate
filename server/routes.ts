@@ -54,18 +54,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Onboarding and AI routes
   app.post("/api/onboarding/process", async (req, res) => {
+    console.log("🚀 [API] Onboarding request received");
+    console.log("📝 [API] Request body:", JSON.stringify(req.body, null, 2));
+    
     try {
       const { goal, conversationHistory = [] } = req.body;
+      
       if (!goal) {
+        console.log("❌ [API] No goal provided in request");
         return res.status(400).json({ message: "Goal is required" });
       }
 
+      console.log("✅ [API] Goal received:", goal);
+      console.log("📚 [API] Conversation history length:", conversationHistory.length);
+      
+      console.log("🤖 [API] Calling OpenAI service...");
       const response = await processOnboardingGoal(goal, conversationHistory);
+      
+      console.log("✅ [API] OpenAI response received successfully");
+      console.log("📊 [API] Response structure:", {
+        hasLearningPath: !!response.learningPath,
+        modulesCount: response.learningPath?.modules?.length || 0,
+        followUpQuestionsCount: response.followUpQuestions?.length || 0
+      });
+      
       res.json(response);
     } catch (error) {
+      console.error("💥 [API] Onboarding error details:");
+      console.error("- Error message:", (error as Error).message);
+      console.error("- Error stack:", (error as Error).stack);
+      console.error("- Error type:", typeof error);
+      console.error("- Full error object:", error);
+      
       res.status(500).json({ 
         message: "Failed to process onboarding goal", 
-        error: (error as Error).message 
+        error: (error as Error).message,
+        timestamp: new Date().toISOString()
       });
     }
   });

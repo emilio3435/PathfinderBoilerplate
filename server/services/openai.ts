@@ -37,6 +37,12 @@ export async function processOnboardingGoal(
   goal: string,
   conversationHistory: Array<{ role: string; content: string }> = []
 ): Promise<OnboardingResponse> {
+  console.log("🤖 [OpenAI] processOnboardingGoal called");
+  console.log("📝 [OpenAI] Goal:", goal);
+  console.log("📚 [OpenAI] Conversation history:", conversationHistory);
+  console.log("🔑 [OpenAI] API key configured:", !!process.env.OPENAI_API_KEY);
+  console.log("🔑 [OpenAI] API key preview:", process.env.OPENAI_API_KEY?.substring(0, 10) + "...");
+  
   try {
     const messages: Array<{ role: "system" | "user" | "assistant"; content: string }> = [
       {
@@ -82,6 +88,10 @@ Consider the user's goal, current skill level, timeline, and motivation. Create 
       }
     ];
 
+    console.log("📤 [OpenAI] Sending request to OpenAI with model: gpt-4o");
+    console.log("💬 [OpenAI] Messages count:", messages.length);
+    console.log("📋 [OpenAI] First message preview:", messages[0]?.content?.substring(0, 100) + "...");
+
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
       messages,
@@ -89,9 +99,52 @@ Consider the user's goal, current skill level, timeline, and motivation. Create 
       temperature: 0.7,
     });
 
-    const result = JSON.parse(response.choices[0].message.content || "{}");
+    console.log("✅ [OpenAI] Response received from OpenAI");
+    console.log("📊 [OpenAI] Response choices count:", response.choices.length);
+    console.log("💰 [OpenAI] Token usage:", response.usage);
+
+    const rawContent = response.choices[0].message.content;
+    console.log("📝 [OpenAI] Raw response length:", rawContent?.length || 0);
+    console.log("📝 [OpenAI] Raw response preview:", rawContent?.substring(0, 200) + "...");
+
+    if (!rawContent) {
+      throw new Error("No content received from OpenAI");
+    }
+
+    let result;
+    try {
+      result = JSON.parse(rawContent);
+      console.log("✅ [OpenAI] JSON parsing successful");
+      console.log("🏗️ [OpenAI] Parsed result structure:", {
+        hasLearningPath: !!result.learningPath,
+        hasFollowUpQuestions: !!result.followUpQuestions,
+        learningPathKeys: result.learningPath ? Object.keys(result.learningPath) : [],
+        modulesCount: result.learningPath?.modules?.length || 0
+      });
+    } catch (parseError) {
+      console.error("❌ [OpenAI] JSON parsing failed:", parseError);
+      console.error("📝 [OpenAI] Failed to parse content:", rawContent);
+      throw new Error("Invalid JSON response from OpenAI: " + (parseError as Error).message);
+    }
+
     return result as OnboardingResponse;
   } catch (error) {
+    console.error("💥 [OpenAI] Error in processOnboardingGoal:");
+    console.error("- Error type:", error?.constructor?.name);
+    console.error("- Error message:", (error as Error).message);
+    
+    // Check for specific OpenAI API errors
+    if ((error as any)?.response) {
+      console.error("🔴 [OpenAI] API Response Error:");
+      console.error("- Status:", (error as any).response.status);
+      console.error("- Status Text:", (error as any).response.statusText);
+      console.error("- Response data:", (error as any).response.data);
+    }
+    
+    if ((error as any)?.code) {
+      console.error("🔴 [OpenAI] Error code:", (error as any).code);
+    }
+    
     throw new Error("Failed to process onboarding goal: " + (error as Error).message);
   }
 }
