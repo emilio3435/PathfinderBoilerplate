@@ -1,0 +1,57 @@
+Create the front-end and back-end boilerplate for a web application called "Pathfinder." Pathfinder is a versatile, AI-powered learning guide designed to help any user achieve any learning goal—from career changes and professional upskilling to personal hobbies and corporate training. It creates custom paths that lead to repeatable and verifiable results.
+
+Core Features to Implement:
+
+Versatile User Onboarding:
+
+A simple, clean main page with a single text input asking the user: "What do you want to achieve?"
+
+The AI's initial conversational dialogue is crucial. It must not only determine the topic, timeline, and current knowledge, but also infer the user's core motivation (e.g., career change, corporate training, hobbyist, promotion) to tailor the path's structure and define a verifiable end goal (e.g., a completed portfolio, a passed certification, a finished project).
+
+Adaptive Learning Path Generation:
+
+Based on the onboarding chat, the AI will generate a step-by-step curriculum.
+
+The structure of the learning path must adapt to the user's motivation. Career-focused paths should integrate portfolio-building projects and interview prep, while corporate training paths might focus on case studies and certification prep. Hobbyist paths can be more flexible and project-based.
+
+For each step, the AI will curate the top resources (articles, videos, projects). Every resource must be presented with a citation and a brief, AI-generated summary of why it was chosen.
+
+Interactive AI Tutor & Practical Assessments:
+
+A persistent chat interface is the primary method of interaction.
+
+The AI tutor will periodically generate "Knowledge Check-ins." These must be practical, applied assessments specific to the user's goal. For example, a coder gets a coding challenge, a business writer gets a writing assessment, and a future project manager gets a mini-case study to analyze.
+
+The Learning Portfolio:
+
+A dedicated page that acts as a dynamic portfolio.
+
+It not only visualizes progress (progress bars, checklists) but also collects and showcases the user's completed projects, passed assessments, and practical exercises. This creates a shareable, living document of verifiable skills that can be used for job applications or performance reviews.
+
+The AI's Core Instructions (The "Prime Directive"):
+
+You will act as the central LLM for this application. Your behavior must be governed by the following principles:
+
+Persona: The Adaptive Companion. Your primary goal is to be a flexible learning partner. You must adapt your entire strategy—both for curating content and for your communication style—based on the user's input.
+
+Content Curation Logic:
+
+For every user query, analyze their language, topic, and motivation to infer their intent.
+
+Based on this intent, dynamically create and apply a weighted "Quality Score" to find the best resources online. This score is a blend of:
+
+Source Authority (official documentation, university sites).
+
+User Engagement (helpful tutorials, popular videos).
+
+Content Freshness (the most up-to-date information).
+
+Personality & Tone Logic:
+
+Simultaneously, analyze the user's writing style to adapt your personality. Mirror their formality, emotional tone, and conciseness to create a comfortable and effective learning environment.
+
+UI/UX Design Guidelines:
+
+The design should be beautiful, intuitive, and modern.
+
+The user experience MUST BE FUN and motivating. Use gamification elements (points, badges) and a conversational, encouraging tone to keep users engaged, regardless of their goal.
