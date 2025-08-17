@@ -1,89 +1,18 @@
-import { useState } from "react";
-import { useLocation } from "wouter";
-import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
-import { useApp } from "@/contexts/AppContext";
+import { useLocation } from "wouter";
 import { 
   Route, 
   Brain, 
   TrendingUp, 
   GraduationCap, 
   ArrowRight,
-  Compass
+  Compass,
+  Zap
 } from "lucide-react";
-import { processOnboardingGoal, createLearningPath, createUser } from "@/lib/api";
 
 export default function LandingPage() {
-  const [goal, setGoal] = useState("");
   const [, setLocation] = useLocation();
-  const { toast } = useToast();
-  const { user, setUser, setCurrentPath } = useApp();
-
-  const onboardingMutation = useMutation({
-    mutationFn: processOnboardingGoal,
-    onSuccess: async (response) => {
-      try {
-        // Create user if not exists
-        let currentUser = user;
-        if (!currentUser) {
-          currentUser = await createUser({
-            name: "New Learner",
-            email: `learner${Date.now()}@sage.ai`,
-            username: `learner${Date.now()}`
-          });
-          setUser(currentUser);
-        }
-
-        // Create learning path
-        const pathData = {
-          userId: currentUser.id,
-          goal: goal, // Include the original goal from the form
-          ...response.learningPath,
-          modules: response.learningPath.modules
-        };
-
-        const newPath = await createLearningPath(pathData);
-        setCurrentPath(newPath);
-
-        toast({
-          title: "Learning Path Created!",
-          description: `Your personalized ${response.learningPath.title} journey is ready.`,
-        });
-
-        setLocation(`/learning/${newPath.id}`);
-      } catch (error) {
-        toast({
-          title: "Error",
-          description: "Failed to create your learning path. Please try again.",
-          variant: "destructive",
-        });
-      }
-    },
-    onError: () => {
-      toast({
-        title: "Error",
-        description: "Failed to process your goal. Please try again.",
-        variant: "destructive",
-      });
-    },
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!goal.trim()) {
-      toast({
-        title: "Goal Required",
-        description: "Please enter what you want to achieve.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    onboardingMutation.mutate({ goal });
-  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sage-light to-white">
@@ -103,31 +32,20 @@ export default function LandingPage() {
         <Card className="bg-white rounded-2xl shadow-xl p-8 mb-8">
           <CardContent className="p-0">
             <h2 className="text-2xl font-semibold text-charcoal mb-6">
-              What do you want to achieve?
+              Ready to start your personalized learning journey?
             </h2>
-            <form onSubmit={handleSubmit} className="relative">
-              <Input
-                type="text"
-                placeholder="e.g., Learn web development, Master data analysis, Get promoted to manager..."
-                value={goal}
-                onChange={(e) => setGoal(e.target.value)}
-                className="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-sage focus:outline-none text-lg pr-20"
-                disabled={onboardingMutation.isPending}
-                data-testid="input-goal"
-              />
-              <Button
-                type="submit"
-                disabled={onboardingMutation.isPending || !goal.trim()}
-                className="absolute right-2 top-2 bg-sage hover:bg-sage-dark text-white px-6 py-3 rounded-lg transition-colors duration-200 font-medium"
-                data-testid="button-start"
-              >
-                {onboardingMutation.isPending ? (
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                ) : (
-                  <ArrowRight className="h-5 w-5" />
-                )}
-              </Button>
-            </form>
+            <p className="text-gray-600 mb-8 text-lg">
+              Our enhanced onboarding takes just 2 minutes to create a learning path perfectly tailored to your goals, timeline, and preferred learning style.
+            </p>
+            <Button
+              onClick={() => setLocation('/onboarding')}
+              className="w-full bg-sage hover:bg-sage-dark text-white px-8 py-4 rounded-xl transition-colors duration-200 font-medium text-lg flex items-center justify-center space-x-3"
+              data-testid="button-start-onboarding"
+            >
+              <Zap className="h-6 w-6" />
+              <span>Create My Learning Path</span>
+              <ArrowRight className="h-5 w-5" />
+            </Button>
           </CardContent>
         </Card>
 

@@ -47,25 +47,33 @@ export async function processOnboardingGoal(
     const messages: Array<{ role: "system" | "user" | "assistant"; content: string }> = [
       {
         role: "system",
-        content: `You are Sage's AI learning advisor. Analyze the user's learning goal and create a comprehensive, personalized learning path. 
+        content: `You are Sage's AI learning advisor. Analyze the user's enhanced learning preferences to create a highly personalized learning path.
+
+ENHANCED PERSONALIZATION INSTRUCTIONS:
+- Parse the user's current skill level and adjust complexity accordingly
+- Adapt to their preferred learning styles (visual, hands-on, reading, interactive, step-by-step)
+- Consider their time commitment and weekly hours for realistic pacing
+- Tailor content to their industry/context when provided
+- Structure the path to achieve their specific outcomes
+- Match their motivation type (career, personal, project, corporate, entrepreneurship)
 
 Your response must be in JSON format with this structure:
 {
   "learningPath": {
     "title": "string",
-    "description": "string", 
-    "motivation": "career|hobby|corporate|personal",
+    "description": "string (highlight how it's tailored to their preferences)", 
+    "motivation": "career|hobby|corporate|personal|project|entrepreneurship",
     "difficulty": "beginner|intermediate|advanced",
-    "estimatedDuration": "string (e.g., '8 weeks', '3 months')",
+    "estimatedDuration": "string (based on their time commitment)",
     "modules": [
       {
         "title": "string",
-        "description": "string",
+        "description": "string (explain why this module fits their learning style)",
         "orderIndex": 0,
         "lessons": [
           {
             "title": "string", 
-            "description": "string",
+            "description": "string (tailored to their industry/outcomes if provided)",
             "orderIndex": 0,
             "duration": 15
           }
@@ -73,10 +81,10 @@ Your response must be in JSON format with this structure:
       }
     ]
   },
-  "followUpQuestions": ["string"]
+  "followUpQuestions": ["string (ask clarifying questions about their specific context)"]
 }
 
-Consider the user's goal, current skill level, timeline, and motivation. Create 4-8 modules with 3-6 lessons each. Make it practical and results-oriented.`
+Create 4-8 modules with 3-6 lessons each. Prioritize their learning preferences and make it practical for their stated goals and timeline.`
       },
       ...conversationHistory.map(msg => ({
         role: msg.role as "user" | "assistant",
@@ -205,38 +213,52 @@ export async function generateLessonContent(
   context: { moduleTitle: string; pathGoal: string }
 ): Promise<any> {
   try {
-    const prompt = `Create comprehensive lesson content for: "${title}"
-Description: ${description}
-Difficulty: ${difficulty}
-Module: ${context.moduleTitle}
-Learning Goal: ${context.pathGoal}
+    const prompt = `Create comprehensive, engaging lesson content for: "${title}"
 
-Respond in JSON format with this structure:
+LESSON DETAILS:
+- Description: ${description}
+- Difficulty: ${difficulty}
+- Module: ${context.moduleTitle}
+- Learning Goal: ${context.pathGoal}
+
+CONTENT REQUIREMENTS:
+- Make content practical and immediately applicable
+- Include diverse learning modalities (visual explanations, hands-on exercises, real examples)
+- Provide high-quality, current resources from reputable sources
+- Create realistic, portfolio-worthy exercises
+- Structure content for progressive understanding
+
+Respond in JSON format with this enhanced structure:
 {
-  "introduction": "Engaging introduction paragraph",
+  "introduction": "Engaging introduction that connects to real-world applications",
   "sections": [
     {
-      "type": "concept|example|exercise|quiz",
-      "title": "Section title",
-      "content": "Section content",
-      "codeExample": "code if applicable",
+      "type": "concept|example|exercise|quiz|visual",
+      "title": "Clear, actionable section title",
+      "content": "Rich content with practical examples and clear explanations",
+      "codeExample": "Well-commented, realistic code examples when applicable",
+      "visualDescription": "Description of diagrams/charts that would help understanding",
       "resources": [
         {
-          "title": "Resource title",
-          "url": "https://example.com",
-          "type": "article|video|documentation",
-          "summary": "Why this resource was chosen"
+          "title": "Specific resource title",
+          "url": "https://actual-working-url.com",
+          "type": "article|video|documentation|interactive|course",
+          "summary": "Why this specific resource enhances learning",
+          "estimatedTime": "5-15 minutes"
         }
       ]
     }
   ],
-  "keyTakeaways": ["Key point 1", "Key point 2"],
+  "keyTakeaways": ["Specific, actionable takeaways that students can apply immediately"],
   "practicalExercise": {
-    "title": "Exercise title", 
-    "description": "What to build/do",
-    "instructions": ["Step 1", "Step 2"],
-    "successCriteria": ["Criterion 1", "Criterion 2"]
-  }
+    "title": "Portfolio-worthy exercise title", 
+    "description": "What students will build/accomplish",
+    "instructions": ["Clear, specific step-by-step instructions"],
+    "successCriteria": ["Measurable success criteria"],
+    "estimatedTime": "30-60 minutes",
+    "skillsReinforced": ["Skills this exercise reinforces"]
+  },
+  "nextSteps": ["Suggestions for further exploration or next lesson preparation"]
 }`;
 
     const response = await openai.chat.completions.create({
