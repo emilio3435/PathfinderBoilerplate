@@ -95,39 +95,75 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.post("/api/learning-paths", async (req, res) => {
+    console.log("🚀 [API] Learning path creation request received");
+    console.log("📝 [API] Request body:", JSON.stringify(req.body, null, 2));
+    
     try {
-      const pathData = insertLearningPathSchema.parse(req.body);
+      // Extract only the learning path fields, excluding modules for schema validation
+      const { modules, ...learningPathData } = req.body;
+      console.log("📊 [API] Extracted learning path data:", JSON.stringify(learningPathData, null, 2));
+      console.log("📚 [API] Modules count:", modules?.length || 0);
+      
+      const pathData = insertLearningPathSchema.parse(learningPathData);
+      console.log("✅ [API] Schema validation passed");
+      
       const path = await storage.createLearningPath(pathData);
+      console.log("✅ [API] Learning path created:", path.id);
       
       // Create modules and lessons from AI-generated structure
-      if (req.body.modules) {
-        for (const moduleData of req.body.modules) {
+      if (modules && Array.isArray(modules)) {
+        console.log("🏗️ [API] Creating modules and lessons...");
+        
+        for (let i = 0; i < modules.length; i++) {
+          const moduleData = modules[i];
+          console.log(`📦 [API] Creating module ${i + 1}: ${moduleData.title}`);
+          
           const module = await storage.createModule({
             pathId: path.id,
             title: moduleData.title,
-            description: moduleData.description,
+            description: moduleData.description || null,
             orderIndex: moduleData.orderIndex,
             totalLessons: moduleData.lessons?.length || 0
           });
+          console.log(`✅ [API] Module created: ${module.id}`);
 
-          if (moduleData.lessons) {
-            for (const lessonData of moduleData.lessons) {
-              await storage.createLesson({
+          if (moduleData.lessons && Array.isArray(moduleData.lessons)) {
+            console.log(`📝 [API] Creating ${moduleData.lessons.length} lessons for module ${moduleData.title}`);
+            
+            for (let j = 0; j < moduleData.lessons.length; j++) {
+              const lessonData = moduleData.lessons[j];
+              console.log(`📖 [API] Creating lesson ${j + 1}: ${lessonData.title}`);
+              
+              const lesson = await storage.createLesson({
                 moduleId: module.id,
                 title: lessonData.title,
-                description: lessonData.description,
+                description: lessonData.description || null,
                 orderIndex: lessonData.orderIndex,
-                duration: lessonData.duration,
+                duration: lessonData.duration || null,
                 content: {}, // Will be generated when accessed
-                resources: []
+                resources: null
               });
+              console.log(`✅ [API] Lesson created: ${lesson.id}`);
             }
           }
         }
       }
 
+      console.log("🎉 [API] Learning path creation completed successfully");
+      console.log("📊 [API] Final path structure:", {
+        id: path.id,
+        title: path.title,
+        modulesCreated: modules?.length || 0
+      });
+      
       res.json(path);
     } catch (error) {
+      console.error("💥 [API] Learning path creation failed:");
+      console.error("- Error type:", error?.constructor?.name);
+      console.error("- Error message:", (error as Error).message);
+      console.error("- Error stack:", (error as Error).stack);
+      console.error("- Full error object:", error);
+      
       res.status(400).json({ 
         message: "Invalid learning path data", 
         error: (error as Error).message 

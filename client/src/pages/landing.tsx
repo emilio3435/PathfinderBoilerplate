@@ -40,6 +40,7 @@ export default function LandingPage() {
         // Create learning path
         const pathData = {
           userId: currentUser.id,
+          goal: goal, // Include the original goal from the form
           ...response.learningPath,
           modules: response.learningPath.modules
         };

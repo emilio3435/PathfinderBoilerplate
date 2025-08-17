@@ -1,0 +1,61 @@
+
+> rest-express@1.0.0 dev
+> NODE_ENV=development tsx server/index.ts
+
+8:43:42 PM [express] serving on port 5000
+Browserslist: browsers data (caniuse-lite) is 10 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+🚀 [API] Onboarding request received
+📝 [API] Request body: {
+  "goal": "I want to learn how to use ai"
+}
+✅ [API] Goal received: I want to learn how to use ai
+📚 [API] Conversation history length: 0
+🤖 [API] Calling OpenAI service...
+🤖 [OpenAI] processOnboardingGoal called
+📝 [OpenAI] Goal: I want to learn how to use ai
+📚 [OpenAI] Conversation history: []
+🔑 [OpenAI] API key configured: true
+🔑 [OpenAI] API key preview: sk-proj-fB...
+📤 [OpenAI] Sending request to OpenAI with model: gpt-4o
+💬 [OpenAI] Messages count: 2
+📋 [OpenAI] First message preview: You are Sage's AI learning advisor. Analyze the user's learning goal and create a comprehensive, per...
+✅ [OpenAI] Response received from OpenAI
+📊 [OpenAI] Response choices count: 1
+💰 [OpenAI] Token usage: {
+  prompt_tokens: 246,
+  completion_tokens: 1007,
+  total_tokens: 1253,
+  prompt_tokens_details: { cached_tokens: 0, audio_tokens: 0 },
+  completion_tokens_details: {
+    reasoning_tokens: 0,
+    audio_tokens: 0,
+    accepted_prediction_tokens: 0,
+    rejected_prediction_tokens: 0
+  }
+}
+📝 [OpenAI] Raw response length: 4782
+📝 [OpenAI] Raw response preview: {
+  "learningPath": {
+    "title": "Mastering AI Usage for Practical Applications",
+    "description": "A comprehensive learning path designed to equip you with the essential skills needed to understa...
+✅ [OpenAI] JSON parsing successful
+🏗️ [OpenAI] Parsed result structure: {
+  hasLearningPath: true,
+  hasFollowUpQuestions: true,
+  learningPathKeys: [
+    'title',
+    'description',
+    'motivation',
+    'difficulty',
+    'estimatedDuration',
+    'modules'
+  ],
+  modulesCount: 5
+}
+✅ [API] OpenAI response received successfully
+📊 [API] Response structure: { hasLearningPath: true, modulesCount: 5, followUpQuestionsCount: 3 }
+8:44:29 PM [express] POST /api/onboarding/process 200 in 8596ms :: {"learningPath":{"title":"Masteri…
+8:44:29 PM [express] POST /api/users 200 in 3ms :: {"username":"learner1755463469228","email":"learn…
+8:44:29 PM [express] POST /api/learning-paths 400 in 2ms :: {"message":"Invalid learning path data",…
