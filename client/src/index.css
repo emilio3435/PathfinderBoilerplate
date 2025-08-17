@@ -1,0 +1,356 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(0, 0%, 20%);
+  --card: hsl(180, 6.6667%, 97.0588%);
+  --card-foreground: hsl(0, 0%, 20%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(0, 0%, 20%);
+  --primary: hsl(203.8863, 88.2845%, 53.1373%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(0, 0%, 20%);
+  --secondary-foreground: hsl(0, 0%, 100%);
+  --muted: hsl(240, 1.9608%, 90%);
+  --muted-foreground: hsl(0, 0%, 20%);
+  --accent: hsl(211.5789, 51.3514%, 92.7451%);
+  --accent-foreground: hsl(203.8863, 88.2845%, 53.1373%);
+  --destructive: hsl(356.3033, 90.5579%, 54.3137%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsl(201.4286, 30.4348%, 90.9804%);
+  --input: hsl(200, 23.0769%, 97.4510%);
+  --ring: hsl(202.8169, 89.1213%, 53.1373%);
+  --chart-1: hsl(203.8863, 88.2845%, 53.1373%);
+  --chart-2: hsl(159.7826, 100%, 36.0784%);
+  --chart-3: hsl(42.0290, 92.8251%, 56.2745%);
+  --chart-4: hsl(147.1429, 78.5047%, 41.9608%);
+  --chart-5: hsl(341.4894, 75.2000%, 50.9804%);
+  --sidebar: hsl(180, 6.6667%, 97.0588%);
+  --sidebar-foreground: hsl(0, 0%, 20%);
+  --sidebar-primary: hsl(203.8863, 88.2845%, 53.1373%);
+  --sidebar-primary-foreground: hsl(0, 0%, 100%);
+  --sidebar-accent: hsl(211.5789, 51.3514%, 92.7451%);
+  --sidebar-accent-foreground: hsl(203.8863, 88.2845%, 53.1373%);
+  --sidebar-border: hsl(205.0000, 25.0000%, 90.5882%);
+  --sidebar-ring: hsl(202.8169, 89.1213%, 53.1373%);
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: Georgia, serif;
+  --font-mono: Menlo, monospace;
+  --radius: 1.3rem;
+  --shadow-2xs: 0px 2px 0px 0px hsl(202.8169, 89.1213%, 53.1373%, 0.00);
+  --shadow-xs: 0px 2px 0px 0px hsl(202.8169, 89.1213%, 53.1373%, 0.00);
+  --shadow-sm: 0px 2px 0px 0px hsl(202.8169, 89.1213%, 53.1373%, 0.00), 0px 1px 2px -1px hsl(202.8169, 89.1213%, 53.1373%, 0.00);
+  --shadow: 0px 2px 0px 0px hsl(202.8169, 89.1213%, 53.1373%, 0.00), 0px 1px 2px -1px hsl(202.8169, 89.1213%, 53.1373%, 0.00);
+  --shadow-md: 0px 2px 0px 0px hsl(202.8169, 89.1213%, 53.1373%, 0.00), 0px 2px 4px -1px hsl(202.8169, 89.1213%, 53.1373%, 0.00);
+  --shadow-lg: 0px 2px 0px 0px hsl(202.8169, 89.1213%, 53.1373%, 0.00), 0px 4px 6px -1px hsl(202.8169, 89.1213%, 53.1373%, 0.00);
+  --shadow-xl: 0px 2px 0px 0px hsl(202.8169, 89.1213%, 53.1373%, 0.00), 0px 8px 10px -1px hsl(202.8169, 89.1213%, 53.1373%, 0.00);
+  --shadow-2xl: 0px 2px 0px 0px hsl(202.8169, 89.1213%, 53.1373%, 0.00);
+  --tracking-normal: 0em;
+  --spacing: 0.25rem;
+
+  /* Sage Brand Colors */
+  --sage: hsl(95, 29%, 63%);
+  --sage-dark: hsl(95, 29%, 43%);
+  --sage-light: hsl(95, 29%, 83%);
+  --golden: hsl(48, 83%, 60%);
+  --charcoal: hsl(0, 0%, 20%);
+}
+
+.dark {
+  --background: hsl(0, 0%, 0%);
+  --foreground: hsl(200, 6.6667%, 91.1765%);
+  --card: hsl(228, 9.8039%, 10%);
+  --card-foreground: hsl(0, 0%, 85.0980%);
+  --popover: hsl(0, 0%, 0%);
+  --popover-foreground: hsl(200, 6.6667%, 91.1765%);
+  --primary: hsl(203.7736, 87.6033%, 52.5490%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(195.0000, 15.3846%, 94.9020%);
+  --secondary-foreground: hsl(0, 0%, 20%);
+  --muted: hsl(0, 0%, 9.4118%);
+  --muted-foreground: hsl(210, 3.3898%, 46.2745%);
+  --accent: hsl(205.7143, 70%, 7.8431%);
+  --accent-foreground: hsl(203.7736, 87.6033%, 52.5490%);
+  --destructive: hsl(356.3033, 90.5579%, 54.3137%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsl(210, 5.2632%, 14.9020%);
+  --input: hsl(207.6923, 27.6596%, 18.4314%);
+  --ring: hsl(202.8169, 89.1213%, 53.1373%);
+  --chart-1: hsl(203.8863, 88.2845%, 53.1373%);
+  --chart-2: hsl(159.7826, 100%, 36.0784%);
+  --chart-3: hsl(42.0290, 92.8251%, 56.2745%);
+  --chart-4: hsl(147.1429, 78.5047%, 41.9608%);
+  --chart-5: hsl(341.4894, 75.2000%, 50.9804%);
+  --sidebar: hsl(228, 9.8039%, 10%);
+  --sidebar-foreground: hsl(0, 0%, 85.0980%);
+  --sidebar-primary: hsl(202.8169, 89.1213%, 53.1373%);
+  --sidebar-primary-foreground: hsl(0, 0%, 100%);
+  --sidebar-accent: hsl(205.7143, 70%, 7.8431%);
+  --sidebar-accent-foreground: hsl(203.7736, 87.6033%, 52.5490%);
+  --sidebar-border: hsl(205.7143, 15.7895%, 26.0784%);
+  --sidebar-ring: hsl(202.8169, 89.1213%, 53.1373%);
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: Georgia, serif;
+  --font-mono: Menlo, monospace;
+  --radius: 1.3rem;
+  --shadow-2xs: 0px 2px 0px 0px hsl(202.8169, 89.1213%, 53.1373%, 0.00);
+  --shadow-xs: 0px 2px 0px 0px hsl(202.8169, 89.1213%, 53.1373%, 0.00);
+  --shadow-sm: 0px 2px 0px 0px hsl(202.8169, 89.1213%, 53.1373%, 0.00), 0px 1px 2px -1px hsl(202.8169, 89.1213%, 53.1373%, 0.00);
+  --shadow: 0px 2px 0px 0px hsl(202.8169, 89.1213%, 53.1373%, 0.00), 0px 1px 2px -1px hsl(202.8169, 89.1213%, 53.1373%, 0.00);
+  --shadow-md: 0px 2px 0px 0px hsl(202.8169, 89.1213%, 53.1373%, 0.00), 0px 2px 4px -1px hsl(202.8169, 89.1213%, 53.1373%, 0.00);
+  --shadow-lg: 0px 2px 0px 0px hsl(202.8169, 89.1213%, 53.1373%, 0.00), 0px 4px 6px -1px hsl(202.8169, 89.1213%, 53.1373%, 0.00);
+  --shadow-xl: 0px 2px 0px 0px hsl(202.8169, 89.1213%, 53.1373%, 0.00), 0px 8px 10px -1px hsl(202.8169, 89.1213%, 53.1373%, 0.00);
+  --shadow-2xl: 0px 2px 0px 0px hsl(202.8169, 89.1213%, 53.1373%, 0.00);
+
+  /* Dark mode brand colors */
+  --sage: hsl(88, 28%, 65%);
+  --sage-dark: hsl(88, 28%, 45%);
+  --sage-light: hsl(88, 28%, 80%);
+  --golden: hsl(48, 83%, 60%);
+  --charcoal: hsl(0, 0%, 90%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Pathfinder Brand Classes */
+  .text-sage {
+    color: var(--sage);
+  }
+  
+  .text-sage-dark {
+    color: var(--sage-dark);
+  }
+  
+  .text-sage-light {
+    color: var(--sage-light);
+  }
+  
+  .text-golden {
+    color: var(--golden);
+  }
+  
+  .text-charcoal {
+    color: var(--charcoal);
+  }
+
+  .bg-sage {
+    background-color: var(--sage);
+  }
+  
+  .bg-sage-dark {
+    background-color: var(--sage-dark);
+  }
+  
+  .bg-sage-light {
+    background-color: var(--sage-light);
+  }
+  
+  .bg-golden {
+    background-color: var(--golden);
+  }
+  
+  .bg-charcoal {
+    background-color: var(--charcoal);
+  }
+
+  .border-sage {
+    border-color: var(--sage);
+  }
+  
+  .border-sage-dark {
+    border-color: var(--sage-dark);
+  }
+  
+  .border-sage-light {
+    border-color: var(--sage-light);
+  }
+
+  .hover\:bg-sage:hover {
+    background-color: var(--sage);
+  }
+  
+  .hover\:bg-sage-dark:hover {
+    background-color: var(--sage-dark);
+  }
+  
+  .hover\:text-sage:hover {
+    color: var(--sage);
+  }
+  
+  .hover\:text-sage-dark:hover {
+    color: var(--sage-dark);
+  }
+
+  .focus\:border-sage:focus {
+    border-color: var(--sage);
+  }
+
+  /* Custom gradient classes */
+  .gradient-sage {
+    background: linear-gradient(135deg, var(--sage-light), var(--sage));
+  }
+
+  .gradient-golden {
+    background: linear-gradient(135deg, var(--golden), #f39c12);
+  }
+
+  /* Animation classes */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  /* Progress bar styling */
+  .progress-sage [data-progress] {
+    background-color: var(--sage);
+  }
+
+  /* Custom scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: hsl(0, 0%, 95%);
+    border-radius: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--sage-light);
+    border-radius: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--sage);
+  }
+}
+
+@layer components {
+  .btn-sage {
+    @apply bg-sage hover:bg-sage-dark text-white font-medium px-4 py-2 rounded-lg transition-colors duration-200;
+  }
+
+  .card-sage {
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6;
+  }
+
+  .input-sage {
+    @apply border-2 border-gray-200 rounded-xl focus:border-sage focus:outline-none transition-colors duration-200;
+  }
+
+  .sidebar-item {
+    @apply flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 cursor-pointer;
+  }
+
+  .sidebar-item-active {
+    @apply bg-sage text-white;
+  }
+
+  .sidebar-item-inactive {
+    @apply text-charcoal hover:bg-sage-light;
+  }
+
+  .achievement-badge {
+    @apply bg-gradient-to-br from-golden to-yellow-500 text-white rounded-lg p-3 flex items-center justify-center;
+  }
+
+  .streak-day {
+    @apply w-6 h-6 rounded transition-all duration-300;
+  }
+
+  .streak-day-active {
+    @apply bg-golden;
+  }
+
+  .streak-day-inactive {
+    @apply bg-sage-light opacity-50;
+  }
+
+  .lesson-section {
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6;
+  }
+
+  .chat-message-user {
+    @apply bg-sage text-white rounded-lg p-3 ml-8;
+  }
+
+  .chat-message-ai {
+    @apply bg-gray-100 text-gray-800 rounded-lg p-3;
+  }
+
+  .progress-ring {
+    @apply relative inline-flex items-center justify-center;
+  }
+
+  .module-completed {
+    @apply bg-green-50 border border-green-200 text-green-800;
+  }
+
+  .module-current {
+    @apply bg-sage text-white;
+  }
+
+  .module-locked {
+    @apply bg-gray-50 opacity-75 text-gray-500;
+  }
+
+  .skill-progress-bar {
+    @apply bg-gray-200 rounded-full h-2 overflow-hidden;
+  }
+
+  .skill-progress-fill {
+    @apply bg-sage h-full rounded-full transition-all duration-500 ease-out;
+  }
+}
+
+@layer utilities {
+  .font-inter {
+    font-family: 'Inter', sans-serif;
+  }
+
+  .text-shadow-sm {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .backdrop-sage {
+    backdrop-filter: blur(10px);
+    background-color: rgba(155, 188, 139, 0.1);
+  }
+
+  .gradient-text-sage {
+    background: linear-gradient(135deg, var(--sage), var(--sage-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .shadow-sage {
+    box-shadow: 0 4px 6px -1px rgba(155, 188, 139, 0.1), 0 2px 4px -1px rgba(155, 188, 139, 0.06);
+  }
+
+  .shadow-sage-lg {
+    box-shadow: 0 10px 15px -3px rgba(155, 188, 139, 0.1), 0 4px 6px -2px rgba(155, 188, 139, 0.05);
+  }
+}
