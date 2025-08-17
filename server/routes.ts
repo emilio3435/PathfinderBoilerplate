@@ -145,6 +145,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
               });
               console.log(`✅ [API] Lesson created: ${lesson.id}`);
             }
+            
+            // Update the module's totalLessons count
+            await storage.updateModule(module.id, {
+              totalLessons: moduleData.lessons.length
+            });
+            console.log(`🔄 [API] Updated module ${moduleData.title} totalLessons to ${moduleData.lessons.length}`);
           }
         }
       }
@@ -181,17 +187,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.get("/api/learning-paths/:id", async (req, res) => {
+    console.log("🚀 [API] Learning path fetch request received for ID:", req.params.id);
+    
     try {
       const path = await storage.getLearningPath(req.params.id);
       if (!path) {
+        console.log("❌ [API] Learning path not found");
         return res.status(404).json({ message: "Learning path not found" });
       }
 
+      console.log("✅ [API] Learning path found:", path.title);
+
+      // Get modules for this path
       const modules = await storage.getPathModules(path.id);
-      const pathWithModules = { ...path, modules };
+      console.log("📦 [API] Found modules:", modules.length);
+
+      // For each module, get its lessons
+      const modulesWithLessons = await Promise.all(
+        modules.map(async (module) => {
+          const lessons = await storage.getModuleLessons(module.id);
+          console.log(`📝 [API] Module "${module.title}" has ${lessons.length} lessons`);
+          return { ...module, lessons };
+        })
+      );
+
+      const pathWithModules = { ...path, modules: modulesWithLessons };
+      
+      console.log("🎉 [API] Learning path fetch completed successfully");
+      console.log("📊 [API] Final structure:", {
+        pathTitle: path.title,
+        modulesCount: modulesWithLessons.length,
+        totalLessons: modulesWithLessons.reduce((sum, mod) => sum + (mod.lessons?.length || 0), 0)
+      });
       
       res.json(pathWithModules);
     } catch (error) {
+      console.error("💥 [API] Learning path fetch failed:", (error as Error).message);
       res.status(500).json({ message: "Failed to fetch learning path" });
     }
   });
