@@ -285,24 +285,9 @@ Please create a learning path that considers all these factors for maximum perso
           <h1 className="text-3xl font-bold text-charcoal mb-2">
             {currentStepData.title}
           </h1>
-          <p className="text-gray-600">
-            Step {currentStep + 1} of {steps.length}
-          </p>
         </div>
 
-        {/* Progress Bar */}
-        <div className="mb-8">
-          <div className="flex justify-between text-xs text-gray-500 mb-2">
-            <span>Progress</span>
-            <span>{Math.round(((currentStep + 1) / steps.length) * 100)}%</span>
-          </div>
-          <div className="h-2 bg-gray-200 rounded-full">
-            <div 
-              className="h-full bg-sage rounded-full transition-all duration-300"
-              style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
-            />
-          </div>
-        </div>
+
 
         {/* Content */}
         <Card className="mb-8">
