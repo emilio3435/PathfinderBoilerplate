@@ -1,6 +1,8 @@
 # Overview
 
-Pathfinder is an AI-powered learning platform designed to help users achieve any learning goal through personalized, adaptive learning paths. The application combines conversational AI guidance with structured curriculum generation, interactive assessments, and portfolio building. Users start by describing their learning objectives, and the AI creates customized step-by-step learning paths with curated resources, practical projects, and ongoing support through an intelligent tutoring system.
+Sage is an AI-powered learning platform designed to help users achieve any learning goal through personalized, adaptive learning paths. The application combines conversational AI guidance with structured curriculum generation, interactive assessments, and portfolio building. Users start by describing their learning objectives through an enhanced onboarding wizard, and the AI creates customized step-by-step learning paths with curated resources, practical projects, and ongoing support through an intelligent tutoring system.
+
+**Key Innovation: Adaptive Difficulty System** - The platform monitors user chat interactions to dynamically analyze comprehension levels and automatically adjusts content difficulty, persona, and recommendations in real-time.
 
 # User Preferences
 
@@ -44,10 +46,30 @@ Database design highlights:
 
 The current architecture includes user management infrastructure with plans for session-based authentication. The database schema supports user profiles with points, streaks, and social features, though authentication middleware is not yet implemented.
 
+## Adaptive Difficulty System
+
+The platform features an advanced adaptive difficulty system that monitors user chat interactions to provide personalized learning experiences:
+
+### Core Components
+- **Difficulty Analysis Engine**: Uses OpenAI to analyze user messages for comprehension patterns
+- **Real-time Adaptation**: Adjusts AI persona and content recommendations based on user understanding
+- **Learning Analytics**: Tracks user progress and confidence levels across lessons and modules
+- **Predictive Recommendations**: Generates adaptive content suggestions for optimal learning pace
+
+### Analysis Triggers
+- Performs difficulty analysis every 5 user messages (minimum 3 messages)
+- Analyzes question complexity, concept grasp, engagement level, and help-seeking patterns
+- Classifies users into four levels: struggling, comfortable, advanced, mastery
+
+### Adaptive Features
+- **Persona Adjustment**: AI tutor becomes more supportive for struggling learners, more challenging for advanced users
+- **Content Modification**: Suggests simplified explanations or advanced topics based on comprehension
+- **Interaction Optimization**: Provides personalized chat suggestions and learning recommendations
+
 ## External Dependencies
 
 - **Neon Database**: Serverless PostgreSQL hosting with connection pooling
-- **OpenAI API**: GPT-4 integration for content generation, learning path creation, and conversational AI tutoring
+- **OpenAI API**: GPT-4o integration for content generation, learning path creation, conversational AI tutoring, and adaptive difficulty analysis
 - **Drizzle ORM**: Type-safe database toolkit with PostgreSQL dialect
 - **shadcn/ui**: Component library built on Radix UI primitives
 - **TanStack Query**: Server state management and caching

@@ -14,6 +14,7 @@ import {
   Sparkles
 } from "lucide-react";
 import { sendChatMessage } from "@/lib/api";
+import AdaptiveInsights from "@/components/learning/adaptive-insights";
 
 interface ChatInterfaceProps {
   userId: string;
@@ -34,6 +35,7 @@ export default function ChatInterface({
 }: ChatInterfaceProps) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<any[]>([]);
+  const [latestInsights, setLatestInsights] = useState<any>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -71,6 +73,12 @@ export default function ChatInterface({
         createdAt: new Date()
       };
       setMessages(prev => [...prev, aiMessage]);
+      
+      // Update adaptive insights if provided
+      if (response.adaptiveInsights) {
+        setLatestInsights(response.adaptiveInsights);
+      }
+      
       setMessage("");
     },
     onError: () => {
@@ -112,6 +120,16 @@ export default function ChatInterface({
   const handleSuggestionClick = (suggestion: string) => {
     setMessage(suggestion);
   };
+
+  // Listen for adaptive suggestion clicks
+  useEffect(() => {
+    const handleAdaptiveSuggestion = (event: any) => {
+      setMessage(event.detail.suggestion);
+    };
+
+    window.addEventListener('adaptiveSuggestionClick', handleAdaptiveSuggestion);
+    return () => window.removeEventListener('adaptiveSuggestionClick', handleAdaptiveSuggestion);
+  }, []);
 
   const formatTime = (date: Date | string) => {
     const d = new Date(date);
@@ -231,6 +249,13 @@ export default function ChatInterface({
               </p>
             </CardContent>
           </Card>
+        )}
+
+        {/* Adaptive Insights */}
+        {latestInsights && (
+          <div className="mt-4">
+            <AdaptiveInsights insights={latestInsights} />
+          </div>
         )}
 
         <div ref={messagesEndRef} />

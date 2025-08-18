@@ -14,6 +14,12 @@ import {
   generateChatResponse, 
   generateLessonContent 
 } from "./services/openai";
+import { 
+  analyzeChatDifficulty, 
+  generateAdaptiveContent, 
+  getAdaptivePersona, 
+  shouldPerformAnalysis 
+} from "./services/adaptive-difficulty";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
@@ -315,6 +321,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Message and userId are required" });
       }
 
+      console.log("💬 [Chat] Processing message from user:", userId);
+
       // Save user message
       await storage.createChatMessage({
         userId,
@@ -325,22 +333,65 @@ export async function registerRoutes(app: Express): Promise<Server> {
         context
       });
 
-      // Get conversation history
+      // Get conversation history for AI response and analysis
       const conversationHistory = await storage.getUserChatMessages(userId, pathId);
+      const userMessageCount = conversationHistory.filter(msg => msg.role === "user").length;
+
+      console.log("📊 [Chat] User message count:", userMessageCount);
+
+      // Perform adaptive difficulty analysis if conditions are met
+      let difficultyAnalysis = null;
+      let adaptivePersona = "You are Sage's AI tutor. You're encouraging, adaptive, and wise.";
+      
+      if (shouldPerformAnalysis(userMessageCount)) {
+        console.log("🧠 [Adaptive] Performing difficulty analysis...");
+        
+        try {
+          difficultyAnalysis = await analyzeChatDifficulty(
+            conversationHistory,
+            context?.currentLesson,
+            context?.currentModule
+          );
+
+          // Store analytics
+          await storage.createUserAnalytics({
+            userId,
+            pathId,
+            lessonId,
+            currentLevel: difficultyAnalysis.currentLevel,
+            confidence: Math.round(difficultyAnalysis.confidence * 100),
+            adjustmentRecommendation: difficultyAnalysis.recommendations.adjustDifficulty,
+            analysisData: difficultyAnalysis
+          });
+
+          // Get adaptive persona for this interaction
+          adaptivePersona = getAdaptivePersona(difficultyAnalysis);
+
+          console.log("✅ [Adaptive] Analysis complete:", {
+            level: difficultyAnalysis.currentLevel,
+            adjustment: difficultyAnalysis.recommendations.adjustDifficulty
+          });
+
+        } catch (error) {
+          console.error("❌ [Adaptive] Analysis failed:", error);
+        }
+      }
+
       const formattedHistory = conversationHistory.slice(-10).map(msg => ({
         role: msg.role,
         content: msg.content
       }));
 
-      // Generate AI response
+      // Generate AI response with adaptive persona
       const aiResponse = await generateChatResponse(message, {
         currentLesson: context?.currentLesson,
         currentModule: context?.currentModule,
         userProgress: context?.userProgress,
-        conversationHistory: formattedHistory
+        conversationHistory: formattedHistory,
+        adaptivePersona // Pass the adaptive persona
       });
 
-      // Save AI response
+      // Save AI response with difficulty analysis
       const aiMessage = await storage.createChatMessage({
         userId,
         pathId,
@@ -350,14 +401,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
         context: {
           suggestions: aiResponse.suggestions,
           contextualHints: aiResponse.contextualHints
-        }
+        },
+        difficultyAnalysis
       });
+
+      // Generate adaptive content recommendations if analysis was performed
+      let adaptiveRecommendations = null;
+      if (difficultyAnalysis) {
+        try {
+          adaptiveRecommendations = await generateAdaptiveContent(
+            difficultyAnalysis,
+            context?.currentLesson,
+            context?.userProgress
+          );
+        } catch (error) {
+          console.error("❌ [Adaptive] Failed to generate recommendations:", error);
+        }
+      }
 
       res.json({
         message: aiResponse.message,
         suggestions: aiResponse.suggestions,
         contextualHints: aiResponse.contextualHints,
-        messageId: aiMessage.id
+        messageId: aiMessage.id,
+        // Include adaptive insights for frontend use
+        adaptiveInsights: difficultyAnalysis ? {
+          currentLevel: difficultyAnalysis.currentLevel,
+          confidence: difficultyAnalysis.confidence,
+          recommendations: adaptiveRecommendations
+        } : null
       });
     } catch (error) {
       res.status(500).json({ 
@@ -377,6 +449,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(messages);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch chat messages" });
+    }
+  });
+
+  // Analytics routes
+  app.get("/api/analytics/user/:userId", async (req, res) => {
+    try {
+      const { pathId } = req.query;
+      const analytics = await storage.getUserAnalytics(
+        req.params.userId,
+        pathId as string
+      );
+      res.json(analytics);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch analytics" });
+    }
+  });
+
+  app.get("/api/analytics/user/:userId/latest", async (req, res) => {
+    try {
+      const { pathId } = req.query;
+      const latestAnalytics = await storage.getLatestAnalytics(
+        req.params.userId,
+        pathId as string
+      );
+      res.json(latestAnalytics || null);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch latest analytics" });
     }
   });
 

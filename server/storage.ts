@@ -6,7 +6,8 @@ import {
   type Project, type InsertProject,
   type Achievement, type InsertAchievement,
   type ChatMessage, type InsertChatMessage,
-  type Skill, type InsertSkill
+  type Skill, type InsertSkill,
+  type UserAnalytics, type InsertUserAnalytics
 } from "@shared/schema";
 import { randomUUID } from "crypto";
 
@@ -50,6 +51,12 @@ export interface IStorage {
   getChatMessage(id: string): Promise<ChatMessage | undefined>;
   getUserChatMessages(userId: string, pathId?: string): Promise<ChatMessage[]>;
   createChatMessage(message: InsertChatMessage): Promise<ChatMessage>;
+  updateChatMessage(id: string, updates: Partial<ChatMessage>): Promise<ChatMessage | undefined>;
+
+  // User Analytics
+  getUserAnalytics(userId: string, pathId?: string): Promise<UserAnalytics[]>;
+  createUserAnalytics(analytics: InsertUserAnalytics): Promise<UserAnalytics>;
+  getLatestAnalytics(userId: string, pathId?: string): Promise<UserAnalytics | undefined>;
 
   // Skills
   getSkill(id: string): Promise<Skill | undefined>;
@@ -67,6 +74,7 @@ export class MemStorage implements IStorage {
   private achievements: Map<string, Achievement> = new Map();
   private chatMessages: Map<string, ChatMessage> = new Map();
   private skills: Map<string, Skill> = new Map();
+  private userAnalytics: Map<string, UserAnalytics> = new Map();
 
   // Users
   async getUser(id: string): Promise<User | undefined> {
@@ -269,10 +277,45 @@ export class MemStorage implements IStorage {
       pathId: insertMessage.pathId || null,
       lessonId: insertMessage.lessonId || null,
       context: insertMessage.context || null,
+      difficultyAnalysis: insertMessage.difficultyAnalysis || null,
       createdAt: new Date()
     };
     this.chatMessages.set(id, message);
     return message;
+  }
+
+  async updateChatMessage(id: string, updates: Partial<ChatMessage>): Promise<ChatMessage | undefined> {
+    const message = this.chatMessages.get(id);
+    if (!message) return undefined;
+    const updatedMessage = { ...message, ...updates };
+    this.chatMessages.set(id, updatedMessage);
+    return updatedMessage;
+  }
+
+  // User Analytics
+  async getUserAnalytics(userId: string, pathId?: string): Promise<UserAnalytics[]> {
+    return Array.from(this.userAnalytics.values())
+      .filter(analytics => 
+        analytics.userId === userId && 
+        (!pathId || analytics.pathId === pathId)
+      )
+      .sort((a, b) => new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime());
+  }
+
+  async createUserAnalytics(insertAnalytics: InsertUserAnalytics): Promise<UserAnalytics> {
+    const id = randomUUID();
+    const analytics: UserAnalytics = { 
+      ...insertAnalytics, 
+      id,
+      createdAt: new Date()
+    };
+    this.userAnalytics.set(id, analytics);
+    return analytics;
+  }
+
+  async getLatestAnalytics(userId: string, pathId?: string): Promise<UserAnalytics | undefined> {
+    const userAnalytics = await this.getUserAnalytics(userId, pathId);
+    return userAnalytics[0]; // First item is most recent due to sorting
   }
 
   // Skills

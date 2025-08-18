@@ -85,6 +85,20 @@ export const chatMessages = pgTable("chat_messages", {
   role: text("role").notNull(), // user, assistant
   content: text("content").notNull(),
   context: jsonb("context"), // current lesson context, user progress, etc.
+  difficultyAnalysis: jsonb("difficulty_analysis"), // adaptive difficulty insights
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// New table for tracking user learning analytics
+export const userAnalytics = pgTable("user_analytics", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  pathId: varchar("path_id").references(() => learningPaths.id),
+  lessonId: varchar("lesson_id").references(() => lessons.id),
+  currentLevel: text("current_level").notNull(), // struggling, comfortable, advanced, mastery
+  confidence: integer("confidence").notNull(), // 0-100
+  adjustmentRecommendation: text("adjustment_recommendation"), // increase, decrease, maintain
+  analysisData: jsonb("analysis_data"), // full analysis results
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -160,3 +174,11 @@ export type InsertChatMessage = z.infer<typeof insertChatMessageSchema>;
 
 export type Skill = typeof skills.$inferSelect;
 export type InsertSkill = z.infer<typeof insertSkillSchema>;
+
+export const insertUserAnalyticsSchema = createInsertSchema(userAnalytics).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type UserAnalytics = typeof userAnalytics.$inferSelect;
+export type InsertUserAnalytics = z.infer<typeof insertUserAnalyticsSchema>;

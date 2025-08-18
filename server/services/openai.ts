@@ -164,21 +164,24 @@ export async function generateChatResponse(
     currentModule?: any;
     userProgress?: any;
     conversationHistory: Array<{ role: string; content: string }>;
+    adaptivePersona?: string;
   }
 ): Promise<ChatResponse> {
   try {
-    const systemPrompt = `You are Sage's AI tutor. You're helping a user learn through their personalized curriculum. 
+    const baseSystemPrompt = context.adaptivePersona || "You are Sage's AI tutor. You're encouraging, adaptive, and wise.";
+    
+    const systemPrompt = `${baseSystemPrompt}
 
 Context:
 - Current lesson: ${context.currentLesson ? `"${context.currentLesson.title}" - ${context.currentLesson.description}` : "None"}
 - Current module: ${context.currentModule ? `"${context.currentModule.title}"` : "None"}
 - User progress: ${context.userProgress ? `${context.userProgress.completed}/${context.userProgress.total} lessons completed` : "Starting"}
 
-Your personality: Encouraging, adaptive, and wise. Match the user's communication style while being supportive. Provide contextual help related to their current lesson when appropriate.
+Match the user's communication style while being supportive. Provide contextual help related to their current lesson when appropriate.
 
 Respond in JSON format:
 {
-  "message": "Your helpful response",
+  "message": "Your helpful response tailored to their current understanding level",
   "suggestions": ["Quick suggestion 1", "Quick suggestion 2"],
   "contextualHints": ["Hint related to current lesson", "Additional context"]
 }`;
