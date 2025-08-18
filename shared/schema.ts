@@ -98,6 +98,8 @@ export const userAnalytics = pgTable("user_analytics", {
   currentLevel: text("current_level").notNull(), // struggling, comfortable, advanced, mastery
   confidence: integer("confidence").notNull(), // 0-100
   adjustmentRecommendation: text("adjustment_recommendation"), // increase, decrease, maintain
+  inferredLearningStyle: text("inferred_learning_style"), // visual, hands-on, reading, interactive, step-by-step
+  learningStyleConfidence: integer("learning_style_confidence"), // 0-100
   analysisData: jsonb("analysis_data"), // full analysis results
   createdAt: timestamp("created_at").defaultNow(),
 });
@@ -146,6 +148,11 @@ export const insertChatMessageSchema = createInsertSchema(chatMessages).omit({
   createdAt: true,
 });
 
+export const insertUserAnalyticsSchema = createInsertSchema(userAnalytics).omit({
+  id: true,
+  createdAt: true,
+});
+
 export const insertSkillSchema = createInsertSchema(skills).omit({
   id: true,
 });
@@ -172,13 +179,8 @@ export type InsertAchievement = z.infer<typeof insertAchievementSchema>;
 export type ChatMessage = typeof chatMessages.$inferSelect;
 export type InsertChatMessage = z.infer<typeof insertChatMessageSchema>;
 
-export type Skill = typeof skills.$inferSelect;
-export type InsertSkill = z.infer<typeof insertSkillSchema>;
-
-export const insertUserAnalyticsSchema = createInsertSchema(userAnalytics).omit({
-  id: true,
-  createdAt: true,
-});
-
 export type UserAnalytics = typeof userAnalytics.$inferSelect;
 export type InsertUserAnalytics = z.infer<typeof insertUserAnalyticsSchema>;
+
+export type Skill = typeof skills.$inferSelect;
+export type InsertSkill = z.infer<typeof insertSkillSchema>;

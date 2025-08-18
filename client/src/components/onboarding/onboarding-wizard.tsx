@@ -27,20 +27,13 @@ interface OnboardingData {
   currentLevel: string;
   timeCommitment: string;
   weeklyHours: string;
-  learningStyle: string[];
   specificOutcomes: string;
   industry: string;
   preferredDuration: string;
   motivation: string;
 }
 
-const LEARNING_STYLES = [
-  { id: "visual", label: "Visual (diagrams, charts, videos)" },
-  { id: "hands-on", label: "Hands-on (projects, coding)" },
-  { id: "reading", label: "Reading (articles, documentation)" },
-  { id: "interactive", label: "Interactive (quizzes, discussions)" },
-  { id: "step-by-step", label: "Step-by-step tutorials" },
-];
+// Learning styles will be inferred from user behavior during first few modules
 
 export default function OnboardingWizard() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -49,7 +42,6 @@ export default function OnboardingWizard() {
     currentLevel: "",
     timeCommitment: "",
     weeklyHours: "",
-    learningStyle: [],
     specificOutcomes: "",
     industry: "",
     preferredDuration: "",
@@ -70,7 +62,7 @@ User Context:
 - Current Level: ${data.currentLevel}
 - Time Commitment: ${data.weeklyHours} hours per week
 - Preferred Duration: ${data.preferredDuration}
-- Learning Style: ${data.learningStyle.join(", ")}
+- Learning Style: Will be inferred from behavior during first modules
 - Industry/Context: ${data.industry}
 - Motivation: ${data.motivation}
 - Specific Outcomes: ${data.specificOutcomes}
@@ -131,27 +123,20 @@ Please create a learning path that considers all these factors for maximum perso
     setData(prev => ({ ...prev, ...updates }));
   };
 
-  const handleLearningStyleChange = (styleId: string, checked: boolean) => {
-    if (checked) {
-      updateData({ learningStyle: [...data.learningStyle, styleId] });
-    } else {
-      updateData({ learningStyle: data.learningStyle.filter(s => s !== styleId) });
-    }
-  };
+  // Learning styles will be inferred from user behavior
 
   const canProceed = (step: number) => {
     switch (step) {
       case 0: return data.goal.trim().length > 0;
       case 1: return data.currentLevel && data.motivation;
       case 2: return data.weeklyHours && data.preferredDuration;
-      case 3: return data.learningStyle.length > 0;
-      case 4: return true; // Optional fields
+      case 3: return true; // Final details - optional fields
       default: return true;
     }
   };
 
   const nextStep = () => {
-    if (currentStep < 4) setCurrentStep(currentStep + 1);
+    if (currentStep < 3) setCurrentStep(currentStep + 1);
   };
 
   const prevStep = () => {
@@ -253,29 +238,6 @@ Please create a learning path that considers all these factors for maximum perso
                 <SelectItem value="6+ months">6+ months (thorough mastery)</SelectItem>
               </SelectContent>
             </Select>
-          </div>
-        </div>
-      )
-    },
-    {
-      title: "Learning Style",
-      icon: BookOpen,
-      component: (
-        <div className="space-y-4">
-          <Label className="text-base font-medium">How do you learn best? (Select all that apply)</Label>
-          <div className="grid grid-cols-1 gap-3">
-            {LEARNING_STYLES.map((style) => (
-              <div key={style.id} className="flex items-center space-x-3">
-                <Checkbox
-                  id={style.id}
-                  checked={data.learningStyle.includes(style.id)}
-                  onCheckedChange={(checked) => handleLearningStyleChange(style.id, checked as boolean)}
-                />
-                <Label htmlFor={style.id} className="flex-1 text-sm cursor-pointer">
-                  {style.label}
-                </Label>
-              </div>
-            ))}
           </div>
         </div>
       )

@@ -131,9 +131,9 @@ Sage provides comprehensive insights into your learning journey:
 ## 🎨 User Experience Highlights
 
 ### Enhanced Onboarding
-- **5-step wizard** collecting detailed learning preferences
+- **4-step wizard** collecting detailed learning preferences
 - **Skill level assessment** with personalized baseline setting
-- **Learning style analysis** (visual, auditory, kinesthetic, reading/writing)
+- **Learning style inference** through behavioral analysis during first modules
 - **Goal setting** with specific outcomes and timelines
 - **Industry context** for relevant, practical applications
 

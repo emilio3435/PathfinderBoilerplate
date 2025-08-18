@@ -52,19 +52,23 @@ The platform features an advanced adaptive difficulty system that monitors user 
 
 ### Core Components
 - **Difficulty Analysis Engine**: Uses OpenAI to analyze user messages for comprehension patterns
-- **Real-time Adaptation**: Adjusts AI persona and content recommendations based on user understanding
-- **Learning Analytics**: Tracks user progress and confidence levels across lessons and modules
+- **Learning Style Inference**: Automatically detects preferred learning styles (visual, hands-on, reading, interactive, step-by-step) from user behavior
+- **Real-time Adaptation**: Adjusts AI persona and content recommendations based on user understanding and learning preferences
+- **Learning Analytics**: Tracks user progress, confidence levels, and inferred learning styles across lessons and modules
 - **Predictive Recommendations**: Generates adaptive content suggestions for optimal learning pace
 
 ### Analysis Triggers
 - Performs difficulty analysis every 5 user messages (minimum 3 messages)
 - Analyzes question complexity, concept grasp, engagement level, and help-seeking patterns
-- Classifies users into four levels: struggling, comfortable, advanced, mastery
+- Infers learning style preferences from conversation patterns and content requests
+- Classifies users into four difficulty levels: struggling, comfortable, advanced, mastery
 
 ### Adaptive Features
 - **Persona Adjustment**: AI tutor becomes more supportive for struggling learners, more challenging for advanced users
 - **Content Modification**: Suggests simplified explanations or advanced topics based on comprehension
+- **Learning Style Adaptation**: Emphasizes visual examples, hands-on projects, or detailed explanations based on inferred preferences
 - **Interaction Optimization**: Provides personalized chat suggestions and learning recommendations
+- **Dynamic Onboarding**: Removes the need for users to self-assess learning styles by inferring them through behavior
 
 ## External Dependencies
 

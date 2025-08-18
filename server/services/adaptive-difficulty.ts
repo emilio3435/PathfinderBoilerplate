@@ -6,10 +6,17 @@ export interface DifficultyAnalysis {
   currentLevel: "struggling" | "comfortable" | "advanced" | "mastery";
   confidence: number; // 0-1
   indicators: string[];
+  inferredLearningStyle: {
+    primary: "visual" | "hands-on" | "reading" | "interactive" | "step-by-step";
+    secondary?: "visual" | "hands-on" | "reading" | "interactive" | "step-by-step";
+    confidence: number; // 0-1
+    patterns: string[]; // Behavioral indicators that led to this inference
+  };
   recommendations: {
     adjustDifficulty: "increase" | "decrease" | "maintain";
     suggestedContent: string[];
     focusAreas: string[];
+    learningStyleAdaptations: string[];
   };
   adaptivePrompts: {
     nextLesson: string;
@@ -23,6 +30,13 @@ export interface ChatPattern {
   engagementLevel: number; // 0-1
   needsHelp: boolean;
   topicMastery: number; // 0-1
+  learningStyleIndicators: {
+    visual: number; // 0-1, asks for diagrams, charts, visual examples
+    handsOn: number; // 0-1, wants to build, practice, try things
+    reading: number; // 0-1, asks for articles, documentation, detailed explanations
+    interactive: number; // 0-1, enjoys quizzes, back-and-forth questioning
+    stepByStep: number; // 0-1, prefers structured, sequential learning
+  };
 }
 
 /**
@@ -50,7 +64,7 @@ export async function analyzeChatDifficulty(
       return getDefaultAnalysis();
     }
 
-    const analysisPrompt = `Analyze this student's chat interactions to assess their learning difficulty level and comprehension.
+    const analysisPrompt = `Analyze this student's chat interactions to assess their learning difficulty level, comprehension, and preferred learning style.
 
 CURRENT CONTEXT:
 - Lesson: ${currentLesson?.title || "General learning"}
@@ -69,6 +83,12 @@ Analyze the user's:
 3. Engagement level and learning patterns
 4. Whether they frequently need help or clarification
 5. Topic mastery indicators
+6. Learning style preferences based on:
+   - Visual: asks for diagrams, charts, visual examples, "show me"
+   - Hands-on: wants to build, practice, try things, "let me do it"
+   - Reading: asks for articles, documentation, detailed explanations, "explain more"
+   - Interactive: enjoys back-and-forth questions, quizzes, discussions
+   - Step-by-step: prefers structured, sequential learning, "what's next"
 
 Respond in JSON format:
 {
@@ -78,6 +98,15 @@ Respond in JSON format:
     "Specific observations about their learning level",
     "Evidence from their messages"
   ],
+  "inferredLearningStyle": {
+    "primary": "visual|hands-on|reading|interactive|step-by-step",
+    "secondary": "visual|hands-on|reading|interactive|step-by-step",
+    "confidence": 0.75,
+    "patterns": [
+      "Evidence of visual learning preferences",
+      "Behavioral indicators observed"
+    ]
+  },
   "recommendations": {
     "adjustDifficulty": "increase|decrease|maintain",
     "suggestedContent": [
@@ -87,10 +116,14 @@ Respond in JSON format:
     "focusAreas": [
       "Areas needing reinforcement",
       "Skills to develop"
+    ],
+    "learningStyleAdaptations": [
+      "Specific content types to emphasize",
+      "Teaching methods to prioritize"
     ]
   },
   "adaptivePrompts": {
-    "nextLesson": "Prompt modifier for generating next lesson content based on their level",
+    "nextLesson": "Prompt modifier for generating next lesson content based on their level and learning style",
     "chatPersona": "Personality adjustment for AI responses (more supportive, more challenging, etc.)"
   }
 }`;
@@ -221,13 +254,19 @@ function getDefaultAnalysis(): DifficultyAnalysis {
     currentLevel: "comfortable",
     confidence: 0.5,
     indicators: ["Insufficient data for analysis"],
+    inferredLearningStyle: {
+      primary: "interactive",
+      confidence: 0.3,
+      patterns: ["Limited data - defaulting to interactive style until behavior patterns emerge"]
+    },
     recommendations: {
       adjustDifficulty: "maintain",
       suggestedContent: ["Continue with current curriculum"],
-      focusAreas: ["General comprehension"]
+      focusAreas: ["General comprehension"],
+      learningStyleAdaptations: ["Mix different content types to identify preferences"]
     },
     adaptivePrompts: {
-      nextLesson: "Standard difficulty level",
+      nextLesson: "Standard difficulty level with varied learning formats",
       chatPersona: "Supportive and encouraging"
     }
   };

@@ -353,7 +353,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             context?.currentModule
           );
 
-          // Store analytics
+          // Store analytics including learning style inference
           await storage.createUserAnalytics({
             userId,
             pathId,
@@ -361,6 +361,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             currentLevel: difficultyAnalysis.currentLevel,
             confidence: Math.round(difficultyAnalysis.confidence * 100),
             adjustmentRecommendation: difficultyAnalysis.recommendations.adjustDifficulty,
+            inferredLearningStyle: difficultyAnalysis.inferredLearningStyle.primary,
+            learningStyleConfidence: Math.round(difficultyAnalysis.inferredLearningStyle.confidence * 100),
             analysisData: difficultyAnalysis
           });
 
