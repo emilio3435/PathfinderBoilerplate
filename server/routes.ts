@@ -347,8 +347,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.log("🧠 [Adaptive] Performing difficulty analysis...");
         
         try {
+          const formattedHistory = conversationHistory.map(msg => ({
+            role: msg.role,
+            content: msg.content,
+            createdAt: msg.createdAt || new Date()
+          }));
+          
           difficultyAnalysis = await analyzeChatDifficulty(
-            conversationHistory,
+            formattedHistory,
             context?.currentLesson,
             context?.currentModule
           );

@@ -19,7 +19,7 @@ function ModuleCard({ module, moduleNumber }: { module: any; moduleNumber: numbe
     enabled: isOpen
   });
 
-  const lessons = moduleWithLessons?.lessons || [];
+  const lessons = (moduleWithLessons as any)?.lessons || [];
 
   // Generate content type breakdown for lessons
   const getContentTypes = (lesson: any) => {
@@ -202,8 +202,12 @@ export default function CourseOverview() {
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-sage rounded-xl flex items-center justify-center mx-auto mb-4">
-            <BookOpen className="h-8 w-8 text-white" />
+          <div className="w-16 h-16 flex items-center justify-center mx-auto mb-4">
+            <img 
+              src="@assets/ChatGPT Image Aug 18, 2025, 09_24_06 PM_1755574392810.png" 
+              alt="Sage Logo" 
+              className="w-full h-full object-contain"
+            />
           </div>
           <h1 className="text-3xl font-bold text-charcoal mb-2">
             Your Learning Path Overview

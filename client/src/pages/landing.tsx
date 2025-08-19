@@ -18,8 +18,12 @@ export default function LandingPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sage-light to-white">
       <div className="max-w-2xl mx-auto px-4 text-center">
         <div className="mb-8">
-          <div className="w-20 h-20 bg-sage rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-            <Compass className="h-10 w-10 text-white" />
+          <div className="w-20 h-20 flex items-center justify-center mx-auto mb-6">
+            <img 
+              src="@assets/ChatGPT Image Aug 18, 2025, 09_24_06 PM_1755574392810.png" 
+              alt="Sage Logo" 
+              className="w-full h-full object-contain"
+            />
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-charcoal mb-4">
             Welcome to Sage
