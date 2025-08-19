@@ -307,6 +307,8 @@ export class MemStorage implements IStorage {
     const analytics: UserAnalytics = { 
       ...insertAnalytics, 
       id,
+      pathId: insertAnalytics.pathId || null,
+      lessonId: insertAnalytics.lessonId || null,
       createdAt: new Date()
     };
     this.userAnalytics.set(id, analytics);
