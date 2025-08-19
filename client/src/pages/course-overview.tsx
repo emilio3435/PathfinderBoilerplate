@@ -128,6 +128,7 @@ interface CourseOverviewProps {
 export default function CourseOverview() {
   const [, params] = useRoute("/course-overview/:pathId");
   const [, setLocation] = useLocation();
+  const [feedbackText, setFeedbackText] = useState("");
   
   const pathId = params?.pathId;
 
@@ -152,16 +153,18 @@ export default function CourseOverview() {
     }
   });
 
-  const regenerateMutation = useMutation({
-    mutationFn: async () => {
-      const response = await fetch(`/api/learning-paths/${pathId}/regenerate`, {
+  const submitFeedbackMutation = useMutation({
+    mutationFn: async ({ feedback }: { feedback: string }) => {
+      const response = await fetch(`/api/learning-paths/${pathId}/feedback`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ feedback })
       });
-      if (!response.ok) throw new Error('Failed to regenerate learning path');
+      if (!response.ok) throw new Error('Failed to submit feedback');
       return response.json();
     },
     onSuccess: () => {
+      setFeedbackText("");
       queryClient.invalidateQueries({ queryKey: ['/api/learning-paths', pathId] });
     }
   });
@@ -253,23 +256,50 @@ export default function CourseOverview() {
 
         <Separator className="my-8" />
 
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
-          <Button
-            variant="outline"
-            onClick={() => regenerateMutation.mutate()}
-            disabled={regenerateMutation.isPending}
-            className="flex items-center gap-2"
-            data-testid="button-regenerate-path"
-          >
-            {regenerateMutation.isPending ? (
-              <div className="w-4 h-4 border-2 border-sage border-t-transparent rounded-full animate-spin" />
-            ) : (
-              <RefreshCw className="h-4 w-4" />
-            )}
-            <span>Regenerate Path</span>
-          </Button>
+        {/* Feedback Section */}
+        <Card className="mb-8 bg-sage-light/20 border-sage-light">
+          <CardContent className="p-6">
+            <h3 className="font-semibold text-charcoal mb-3">How does this syllabus look?</h3>
+            <p className="text-gray-600 text-sm mb-4">
+              If you'd like any changes to the modules, lessons, or focus areas, let us know what you'd like to adjust.
+            </p>
+            
+            <div className="space-y-4">
+              <textarea
+                placeholder="Example: Add more hands-on practice exercises, focus more on advanced techniques, include specific breed considerations..."
+                className="w-full p-3 border border-gray-300 rounded-lg resize-none h-20 text-sm focus:ring-2 focus:ring-sage focus:border-transparent"
+                value={feedbackText}
+                onChange={(e) => setFeedbackText(e.target.value)}
+                data-testid="textarea-syllabus-feedback"
+              />
+              
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  onClick={() => submitFeedbackMutation.mutate({ feedback: feedbackText })}
+                  disabled={submitFeedbackMutation.isPending || !feedbackText.trim()}
+                  className="flex-1"
+                  data-testid="button-submit-feedback"
+                >
+                  {submitFeedbackMutation.isPending ? (
+                    <>
+                      <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                      Updating syllabus...
+                    </>
+                  ) : (
+                    <>
+                      <RefreshCw className="h-4 w-4 mr-2" />
+                      Request Changes
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
+        {/* Action Buttons */}
+        <div className="flex justify-center">
           <Button
             onClick={() => startLearningMutation.mutate()}
             disabled={startLearningMutation.isPending}
@@ -280,7 +310,7 @@ export default function CourseOverview() {
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
             ) : (
               <>
-                <span>Start Learning Journey</span>
+                <span>Looks good, start learning!</span>
                 <ArrowRight className="h-5 w-5" />
               </>
             )}

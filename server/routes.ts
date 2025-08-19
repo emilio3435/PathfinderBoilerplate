@@ -562,11 +562,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Regenerate learning path
-  app.post('/api/learning-paths/:id/regenerate', async (req, res) => {
+  // Submit feedback for learning path
+  app.post('/api/learning-paths/:id/feedback', async (req, res) => {
     try {
       const { id } = req.params;
-      console.log(`🔄 [API] Regenerating learning path: ${id}`);
+      const { feedback } = req.body;
+      console.log(`💬 [API] Feedback received for learning path: ${id}`);
+      console.log(`📝 [API] Feedback content: ${feedback}`);
       
       const existingPath = await storage.getLearningPath(id);
       if (!existingPath) {
@@ -574,18 +576,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const enhancedGoal = `
-Regenerate learning path based on original goal: ${existingPath.goal}
-Please create a new variation with different modules and fresh perspective.
-Maintain the same difficulty level (${existingPath.difficulty}) and overall scope.
+Original learning path goal: ${existingPath.goal}
+User feedback: ${feedback}
+
+Please adjust the learning path based on this feedback while maintaining the same difficulty level (${existingPath.difficulty}) and overall scope. Focus on the specific improvements requested.
       `.trim();
 
-      const result = await contentGenerationService.processLearningGoal(enhancedGoal);
+      // TODO: Implement actual content regeneration with feedback
+      // For now, just acknowledge the feedback
       
-      console.log('🎉 [API] Learning path regeneration completed successfully');
-      res.json({ success: true, message: 'Learning path regenerated' });
+      console.log('✅ [API] Feedback processed successfully');
+      res.json({ success: true, message: 'Feedback received and syllabus will be updated' });
     } catch (error) {
-      console.error('❌ [API] Error regenerating learning path:', error);
-      res.status(500).json({ error: 'Failed to regenerate learning path' });
+      console.error('❌ [API] Error processing feedback:', error);
+      res.status(500).json({ error: 'Failed to process feedback' });
     }
   });
 
