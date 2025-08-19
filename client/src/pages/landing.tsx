@@ -11,6 +11,8 @@ import {
   Zap
 } from "lucide-react";
 
+import ChatGPT_Image_Aug_18__2025__09_24_06_PM from "@assets/ChatGPT Image Aug 18, 2025, 09_24_06 PM.png";
+
 export default function LandingPage() {
   const [, setLocation] = useLocation();
 
@@ -20,7 +22,7 @@ export default function LandingPage() {
         <div className="mb-8">
           <div className="w-20 h-20 flex items-center justify-center mx-auto mb-6">
             <img 
-              src="@assets/ChatGPT Image Aug 18, 2025, 09_24_06 PM_1755574392810.png" 
+              src={ChatGPT_Image_Aug_18__2025__09_24_06_PM} 
               alt="Sage Logo" 
               className="w-full h-full object-contain"
             />
