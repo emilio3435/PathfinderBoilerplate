@@ -11,6 +11,8 @@ import {
   Target
 } from "lucide-react";
 
+import ChatGPT_Image_Aug_18__2025__09_24_06_PM from "@assets/ChatGPT Image Aug 18, 2025, 09_24_06 PM.png";
+
 interface ModuleSidebarProps {
   path: any;
   selectedLessonId: string | null;
@@ -38,8 +40,12 @@ export default function ModuleSidebar({
       {/* Course Header */}
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center space-x-3 mb-4">
-          <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-            <Target className="h-5 w-5 text-blue-600" />
+          <div className="w-10 h-10 rounded-lg flex items-center justify-center">
+            <img 
+              src={ChatGPT_Image_Aug_18__2025__09_24_06_PM} 
+              alt="Sage Logo" 
+              className="w-full h-full object-contain"
+            />
           </div>
           <div>
             <h2 className="font-semibold text-charcoal" data-testid="text-path-title">

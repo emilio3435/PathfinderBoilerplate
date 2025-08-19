@@ -16,6 +16,8 @@ import {
 import { sendChatMessage } from "@/lib/api";
 import AdaptiveInsights from "@/components/learning/adaptive-insights";
 
+import ChatGPT_Image_Aug_18__2025__09_24_06_PM from "@assets/ChatGPT Image Aug 18, 2025, 09_24_06 PM.png";
+
 interface ChatInterfaceProps {
   userId: string;
   pathId?: string;
@@ -145,8 +147,12 @@ export default function ChatInterface({
       {/* Chat Header */}
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-sage rounded-full flex items-center justify-center">
-            <Bot className="h-5 w-5 text-white" />
+          <div className="w-10 h-10 rounded-full flex items-center justify-center">
+            <img 
+              src={ChatGPT_Image_Aug_18__2025__09_24_06_PM} 
+              alt="Sage AI Tutor" 
+              className="w-full h-full object-contain"
+            />
           </div>
           <div>
             <h3 className="font-semibold text-charcoal">AI Tutor</h3>
@@ -159,7 +165,13 @@ export default function ChatInterface({
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.length === 0 && (
           <div className="text-center py-8">
-            <Bot className="h-12 w-12 mx-auto mb-4 text-sage opacity-50" />
+            <div className="w-12 h-12 mx-auto mb-4 opacity-50">
+              <img 
+                src={ChatGPT_Image_Aug_18__2025__09_24_06_PM} 
+                alt="Sage AI Tutor" 
+                className="w-full h-full object-contain"
+              />
+            </div>
             <p className="text-gray-500 mb-2">Welcome to your AI tutor!</p>
             <p className="text-sm text-gray-400">
               Ask me anything about your current lesson or learning path.
@@ -170,8 +182,12 @@ export default function ChatInterface({
         {messages.map((msg) => (
           <div key={msg.id} className={`flex space-x-3 ${msg.role === 'user' ? 'justify-end' : ''}`}>
             {msg.role === 'assistant' && (
-              <div className="w-8 h-8 bg-sage rounded-full flex items-center justify-center flex-shrink-0">
-                <Bot className="h-4 w-4 text-white" />
+              <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
+                <img 
+                  src={ChatGPT_Image_Aug_18__2025__09_24_06_PM} 
+                  alt="Sage AI Tutor" 
+                  className="w-full h-full object-contain"
+                />
               </div>
             )}
             

@@ -22,6 +22,8 @@ import {
 } from "lucide-react";
 import { processOnboardingGoal, createLearningPath, createUser } from "@/lib/api";
 
+import ChatGPT_Image_Aug_18__2025__09_24_06_PM from "@assets/ChatGPT Image Aug 18, 2025, 09_24_06 PM.png";
+
 interface OnboardingData {
   goal: string;
   currentLevel: string;
@@ -279,8 +281,12 @@ Please create a learning path that considers all these factors for maximum perso
       <div className="max-w-2xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-sage rounded-xl flex items-center justify-center mx-auto mb-4">
-            <Icon className="h-8 w-8 text-white" />
+          <div className="w-16 h-16 flex items-center justify-center mx-auto mb-4">
+            <img 
+              src={ChatGPT_Image_Aug_18__2025__09_24_06_PM} 
+              alt="Sage Logo" 
+              className="w-full h-full object-contain"
+            />
           </div>
           <h1 className="text-3xl font-bold text-charcoal mb-2">
             {currentStepData.title}

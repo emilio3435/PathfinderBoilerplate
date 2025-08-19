@@ -10,6 +10,8 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
+import ChatGPT_Image_Aug_18__2025__09_24_06_PM from "@assets/ChatGPT Image Aug 18, 2025, 09_24_06 PM.png";
+
 export function Navigation() {
   const [location] = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -27,8 +29,12 @@ export function Navigation() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3" data-testid="link-home">
-            <div className="w-8 h-8 bg-sage rounded-lg flex items-center justify-center">
-              <Compass className="h-5 w-5 text-white" />
+            <div className="w-8 h-8 flex items-center justify-center">
+              <img 
+                src={ChatGPT_Image_Aug_18__2025__09_24_06_PM} 
+                alt="Sage Logo" 
+                className="w-full h-full object-contain"
+              />
             </div>
             <h1 className="text-xl font-bold text-charcoal">Sage</h1>
           </Link>
