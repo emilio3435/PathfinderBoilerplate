@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -10,8 +11,15 @@ import {
   ExternalLink,
   ArrowLeft,
   ArrowRight,
-  CheckCircle
+  CheckCircle,
+  Play,
+  Award
 } from "lucide-react";
+
+// Import new interactive components
+import InteractiveQuiz from "./interactive-quiz";
+import VideoPlayer from "./video-player";
+import CodingChallenge from "./coding-challenge";
 
 interface LessonContentProps {
   lesson: any;
@@ -20,6 +28,27 @@ interface LessonContentProps {
 }
 
 export default function LessonContent({ lesson, isLoading, pathData }: LessonContentProps) {
+  const [completedSections, setCompletedSections] = useState<Set<string>>(new Set());
+  const [lessonProgress, setLessonProgress] = useState(0);
+
+  const markSectionComplete = (sectionId: string) => {
+    setCompletedSections(prev => new Set(Array.from(prev).concat(sectionId)));
+    updateLessonProgress();
+  };
+
+  const updateLessonProgress = () => {
+    const content = lesson?.content || {};
+    const sections = content.sections || [];
+    const totalSections = sections.length + 
+      (content.practicalExercise ? 1 : 0) + 
+      (content.quiz ? 1 : 0) + 
+      (content.video ? 1 : 0) + 
+      (content.codingChallenge ? 1 : 0);
+    
+    const completedCount = completedSections.size;
+    const progress = totalSections > 0 ? Math.round((completedCount / totalSections) * 100) : 0;
+    setLessonProgress(progress);
+  };
   
   if (isLoading) {
     return (
@@ -70,9 +99,14 @@ export default function LessonContent({ lesson, isLoading, pathData }: LessonCon
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-medium text-gray-600">Lesson Progress</span>
-          <span className="text-sm text-gray-600">In Progress</span>
+          <span className="text-sm text-gray-600">
+            {lessonProgress === 100 ? 'Complete' : 'In Progress'}
+          </span>
         </div>
-        <Progress value={lesson.isCompleted ? 100 : 25} className="mb-2" />
+        <Progress value={lessonProgress} className="mb-2" />
+        <div className="text-xs text-gray-500 mt-1">
+          {completedSections.size} of {content.sections?.length || 0} sections completed
+        </div>
       </div>
 
       {/* Introduction */}
@@ -114,6 +148,27 @@ export default function LessonContent({ lesson, isLoading, pathData }: LessonCon
                   <p className="text-gray-700 mb-4" data-testid={`text-section-${index}`}>
                     {section.content}
                   </p>
+                  
+                  {/* Section completion button */}
+                  {!completedSections.has(section.id || `section-${index}`) && (
+                    <Button 
+                      onClick={() => markSectionComplete(section.id || `section-${index}`)}
+                      variant="outline"
+                      size="sm"
+                      className="mb-4"
+                      data-testid={`button-complete-section-${index}`}
+                    >
+                      <CheckCircle className="h-4 w-4 mr-2" />
+                      Mark as Read
+                    </Button>
+                  )}
+                  
+                  {completedSections.has(section.id || `section-${index}`) && (
+                    <div className="flex items-center text-green-600 mb-4">
+                      <CheckCircle className="h-4 w-4 mr-2" />
+                      <span className="text-sm font-medium">Section Complete</span>
+                    </div>
+                  )}
                   
                   {/* Code Example */}
                   {section.codeExample && (
@@ -187,14 +242,55 @@ export default function LessonContent({ lesson, isLoading, pathData }: LessonCon
               )}
               
               <Button 
+                onClick={() => markSectionComplete('practicalExercise')}
                 className="bg-sage hover:bg-sage-dark text-white transition-colors duration-200 font-medium"
                 data-testid="button-start-exercise"
               >
                 <HandHeart className="h-4 w-4 mr-2" />
-                Start Exercise
+                {completedSections.has('practicalExercise') ? 'Exercise Complete' : 'Start Exercise'}
               </Button>
             </CardContent>
           </Card>
+        )}
+
+        {/* Video Content */}
+        {content.video && (
+          <VideoPlayer
+            video={content.video}
+            onComplete={() => markSectionComplete('video')}
+            onProgress={(progress) => {
+              if (progress >= 90) markSectionComplete('video');
+            }}
+          />
+        )}
+
+        {/* Interactive Quiz */}
+        {content.quiz && (
+          <InteractiveQuiz
+            questions={content.quiz.questions}
+            title={content.quiz.title}
+            onComplete={(score, totalPoints) => {
+              markSectionComplete('quiz');
+              // Handle quiz completion
+            }}
+          />
+        )}
+
+        {/* Coding Challenge */}
+        {content.codingChallenge && (
+          <CodingChallenge
+            title={content.codingChallenge.title}
+            description={content.codingChallenge.description}
+            difficulty={content.codingChallenge.difficulty}
+            startingCode={content.codingChallenge.startingCode}
+            solution={content.codingChallenge.solution}
+            testCases={content.codingChallenge.testCases}
+            hints={content.codingChallenge.hints}
+            onComplete={(code, timeTaken) => {
+              markSectionComplete('codingChallenge');
+              // Handle challenge completion
+            }}
+          />
         )}
 
         {/* Key Takeaways */}

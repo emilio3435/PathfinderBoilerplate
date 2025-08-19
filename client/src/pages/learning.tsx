@@ -43,8 +43,8 @@ export default function LearningPage() {
 
   useEffect(() => {
     // Auto-select first available lesson
-    if (pathData?.modules && !selectedLessonId) {
-      const firstModule = pathData.modules[0];
+    if (pathData && (pathData as any)?.modules && !selectedLessonId) {
+      const firstModule = (pathData as any).modules[0];
       if (firstModule) {
         setSelectedModuleId(firstModule.id);
         const firstLesson = firstModule.lessons?.[0];
@@ -98,19 +98,19 @@ export default function LearningPage() {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-2xl font-bold text-charcoal" data-testid="text-lesson-title">
-                  {currentLesson?.title || "Select a lesson to begin"}
+                  {(currentLesson as any)?.title || "Select a lesson to begin"}
                 </h1>
                 <p className="text-gray-600 mt-1" data-testid="text-lesson-description">
-                  {currentLesson?.description || "Choose from the modules on the left"}
+                  {(currentLesson as any)?.description || "Choose from the modules on the left"}
                 </p>
               </div>
               <div className="flex items-center space-x-4">
                 {currentLesson && (
-                  <>
+                  <div className="flex items-center space-x-4">
                     <div className="flex items-center space-x-2">
                       <Clock className="h-4 w-4 text-gray-400" />
                       <span className="text-sm text-gray-600" data-testid="text-lesson-duration">
-                        {currentLesson.duration || 15} min
+                        {(currentLesson as any).duration || 15} min
                       </span>
                     </div>
                     <Button 
@@ -120,7 +120,7 @@ export default function LearningPage() {
                       <Play className="h-4 w-4 mr-2" />
                       Continue
                     </Button>
-                  </>
+                  </div>
                 )}
               </div>
             </div>
@@ -148,9 +148,9 @@ export default function LearningPage() {
                       Select a lesson from the modules on the left to begin your learning journey.
                     </p>
                     <div className="text-sm text-gray-500">
-                      Progress: {pathData.progress || 0}% complete
+                      Progress: {(pathData as any).progress || 0}% complete
                     </div>
-                    <Progress value={pathData.progress || 0} className="mt-2" />
+                    <Progress value={(pathData as any).progress || 0} className="mt-2" />
                   </div>
                 </div>
               )}
@@ -160,12 +160,12 @@ export default function LearningPage() {
             <div className="w-96 border-l border-gray-200">
               <ChatInterface
                 userId={user?.id || ""}
-                pathId={pathData.id}
+                pathId={(pathData as any).id}
                 lessonId={selectedLessonId}
                 currentLesson={currentLesson}
                 currentModule={currentModule}
                 userProgress={{
-                  completed: pathData.progress || 0,
+                  completed: (pathData as any).progress || 0,
                   total: 100
                 }}
               />
