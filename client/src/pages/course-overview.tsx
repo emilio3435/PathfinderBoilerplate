@@ -10,6 +10,8 @@ import { queryClient } from "@/lib/queryClient";
 import { BookOpen, Clock, CheckCircle, ArrowRight, RefreshCw, Play, FileText, Users, Dumbbell, ChevronDown, ChevronRight } from "lucide-react";
 import type { LearningPath } from "@shared/schema";
 
+import ChatGPT_Image_Aug_18__2025__09_24_06_PM from "@assets/ChatGPT Image Aug 18, 2025, 09_24_06 PM.png";
+
 // Component for individual module cards with expandable lesson details
 function ModuleCard({ module, moduleNumber }: { module: any; moduleNumber: number }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -204,7 +206,7 @@ export default function CourseOverview() {
         <div className="text-center mb-8">
           <div className="w-16 h-16 flex items-center justify-center mx-auto mb-4">
             <img 
-              src="@assets/ChatGPT Image Aug 18, 2025, 09_24_06 PM_1755574392810.png" 
+              src={ChatGPT_Image_Aug_18__2025__09_24_06_PM} 
               alt="Sage Logo" 
               className="w-full h-full object-contain"
             />
