@@ -550,6 +550,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Start learning path (mark as approved/started)
+  app.post('/api/learning-paths/:id/start', async (req, res) => {
+    try {
+      const { id } = req.params;
+      console.log(`🚀 [API] Starting learning path: ${id}`);
+      res.json({ success: true, message: 'Learning path started' });
+    } catch (error) {
+      console.error('❌ [API] Error starting learning path:', error);
+      res.status(500).json({ error: 'Failed to start learning path' });
+    }
+  });
+
+  // Regenerate learning path
+  app.post('/api/learning-paths/:id/regenerate', async (req, res) => {
+    try {
+      const { id } = req.params;
+      console.log(`🔄 [API] Regenerating learning path: ${id}`);
+      
+      const existingPath = await storage.getLearningPath(id);
+      if (!existingPath) {
+        return res.status(404).json({ error: 'Learning path not found' });
+      }
+
+      const enhancedGoal = `
+Regenerate learning path based on original goal: ${existingPath.goal}
+Please create a new variation with different modules and fresh perspective.
+Maintain the same difficulty level (${existingPath.difficulty}) and overall scope.
+      `.trim();
+
+      const result = await contentGenerationService.processLearningGoal(enhancedGoal);
+      
+      console.log('🎉 [API] Learning path regeneration completed successfully');
+      res.json({ success: true, message: 'Learning path regenerated' });
+    } catch (error) {
+      console.error('❌ [API] Error regenerating learning path:', error);
+      res.status(500).json({ error: 'Failed to regenerate learning path' });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

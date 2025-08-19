@@ -9,6 +9,7 @@ import { AppContext, User } from "@/contexts/AppContext";
 import LandingPage from "@/pages/landing";
 import LearningPage from "@/pages/learning";
 import PortfolioPage from "@/pages/portfolio";
+import CourseOverview from "@/pages/course-overview";
 import OnboardingWizard from "@/components/onboarding/onboarding-wizard";
 import { Navigation } from "@/components/common/navigation";
 import NotFound from "@/pages/not-found";
@@ -27,6 +28,7 @@ function App() {
             <Switch>
               <Route path="/" component={LandingPage} />
               <Route path="/onboarding" component={OnboardingWizard} />
+              <Route path="/course-overview/:pathId" component={CourseOverview} />
               <Route path="/learning/:pathId?" component={LearningPage} />
               <Route path="/portfolio" component={PortfolioPage} />
               <Route component={NotFound} />

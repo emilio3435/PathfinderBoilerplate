@@ -101,7 +101,7 @@ Please create a learning path that considers all these factors for maximum perso
           description: `Your personalized ${response.learningPath.title} journey is ready.`,
         });
 
-        setLocation(`/learning/${newPath.id}`);
+        setLocation(`/course-overview/${newPath.id}`);
       } catch (error) {
         toast({
           title: "Error",
