@@ -48,7 +48,7 @@ export default function ChatInterface({
   });
 
   useEffect(() => {
-    if (chatHistory) {
+    if (chatHistory && Array.isArray(chatHistory)) {
       setMessages(chatHistory);
     }
   }, [chatHistory]);
