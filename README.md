@@ -7,25 +7,27 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 
-**Transform the way you learn with AI that adapts to your unique learning style in real-time**
+**Master Excel in 4 weeks with AI that adapts to your learning style in real-time**
 
-[🚀 Live Demo](your-demo-url) • [📚 Documentation](your-docs-url) • [🐛 Report Bug](your-issues-url)
+Currently focused on Excel proficiency training with interactive lessons, practical exercises, and adaptive difficulty.
+
+[🚀 Try the Demo](http://localhost:5000/api/demo) • [📊 Excel Learning Path](http://localhost:5000) • [🐛 Report Issues](https://github.com/your-username/sage-learning-platform/issues)
 
 </div>
 
 ---
 
-## 🌟 Revolutionary Learning Experience
+## 🌟 Excel Mastery in 4 Weeks
 
-Sage isn't just another learning platform—it's your personal AI tutor that **learns how you learn**. Using advanced machine learning, Sage analyzes your chat interactions every 5 messages to understand your comprehension patterns and automatically adjusts its teaching approach.
+Sage specializes in **Excel proficiency training** with AI that adapts to your learning style. Instead of generic tutorials, you get personalized learning paths with practical business scenarios, real-time feedback, and hands-on practice that builds job-ready skills.
 
-### ✨ Core Innovations
+### ✨ Why Choose Sage for Excel
 
-- **🧬 Adaptive Difficulty Engine**: Real-time analysis of learning patterns with automatic content adjustment
-- **🎭 Dynamic Persona System**: AI tutor personality that evolves based on your learning style
-- **📊 Intelligent Analytics**: Deep insights into your learning progress and optimization recommendations  
-- **🎯 Personalized Curriculum**: Custom learning paths generated specifically for your goals
-- **💬 Contextual AI Tutoring**: Smart chat assistant that provides help exactly when you need it
+- **📊 Interactive Excel Challenges**: Practice with real formulas, data sets, and business scenarios
+- **🎯 4-Week Structured Program**: From basics to advanced techniques with clear milestones
+- **💼 Business-Ready Skills**: Learn with actual corporate data scenarios and use cases
+- **🤖 AI Excel Tutor**: Get instant help with formulas, explanations, and troubleshooting
+- **📈 Progress Tracking**: Visual progress through Excel skill levels with completion badges
 
 ---
 
@@ -188,18 +190,20 @@ sage/
 
 ## 🛣️ Roadmap
 
-### 🎯 Phase 1: Core Platform (Current)
-- ✅ Adaptive difficulty system
-- ✅ Enhanced onboarding wizard
-- ✅ Real-time chat analysis
-- ✅ Analytics dashboard
+### 🎯 Phase 1: Excel Mastery Platform (Current - December 2024)
+- ✅ Interactive lesson system with quizzes and coding challenges
+- ✅ Real-time progress tracking
+- ✅ Rich content generation (concepts, examples, exercises)
+- ✅ Excel-focused curriculum framework
+- 🚧 Adaptive difficulty analysis (in progress)
+- 🚧 Excel formula practice system (in progress)
 
-### 🚀 Phase 2: Advanced Features
-- [ ] User authentication and profiles
-- [ ] Progress persistence with PostgreSQL
-- [ ] Achievement and badge system
-- [ ] Mobile-responsive design
-- [ ] Content export functionality
+### 🚀 Phase 2: Excel Mastery Features (Next)
+- [ ] Complete Excel curriculum (Basic → Advanced → Expert)
+- [ ] Real-world business scenarios and datasets
+- [ ] Formula builder with instant feedback
+- [ ] Progress persistence and user profiles
+- [ ] Excel skill assessments and certifications
 
 ### 🌟 Phase 3: Community & Scale  
 - [ ] Multi-modal learning (video, audio, interactive)
